@@ -1,11 +1,16 @@
-import 'dart:io';
 
-import 'package:file_picker/file_picker.dart';
+
+
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:jobmail/provider/home_provider/home_provider.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server/gmail.dart';
 
 import '../../api/google_api_service.dart';
+import '../../config/utils/utils.dart';
+import '../../model/mail_model.dart';
+import 'home_widget/attachments.dart';
 import 'home_widget/button.dart';
 import 'home_widget/textfield.dart';
 
@@ -18,6 +23,21 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
 
+  final TextEditingController emailCtrl = TextEditingController();
+  final TextEditingController subjectCtrl = TextEditingController();
+  final TextEditingController bodyCtrl = TextEditingController();
+
+  test(){
+    final newMail = MailModel(
+      email: emailCtrl.text,
+      subject: subjectCtrl.text,
+      body: bodyCtrl.text,
+      attachment:''
+    );
+
+    print(newMail);
+    // ref.read(mailProvider.notifier).addMail(newMail);
+  }
 
   testSend() async {
 
@@ -25,7 +45,7 @@ class _HomeViewState extends State<HomeView> {
 
     // await GoogleAuthApi.signOut();
     // return;
-
+    // final file = File('path/to/your/file.pdf');
 
     final user = await GoogleAuthApi.signIn();
 
@@ -42,7 +62,8 @@ class _HomeViewState extends State<HomeView> {
     final message = Message()
       ..from = Address(email)
       ..recipients.add('mdarshadkp786@gmail.com') //recipent email
-      // ..ccRecipients.addAll(['destCc1@example.com', 'destCc2@example.com']) //cc Recipents emails
+    // ..attachments.add(FileAttachment(file))
+    // ..ccRecipients.addAll(['destCc1@example.com', 'destCc2@example.com']) //cc Recipents emails
       // ..bccRecipients.add(Address('bccAddress@example.com')) //bcc Recipents emails
       ..subject = 'Test Dart Mailer library :: 😀 :: ${DateTime.now()}' //subject of the email
       ..text = 'This is the plain text.\nThis is line 2 of the text part.'; //body of the email
@@ -81,45 +102,31 @@ class _HomeViewState extends State<HomeView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.max,
             children: [
-              const CustomTextField(label: 'Email:'),
-              const CustomTextField(label: 'Subject:'),
-              const CustomTextField(label: 'Mail:',maxLines: 5,),
-              SecondaryButton(onTap: testSend),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.white, backgroundColor: Colors.blue,
-                  elevation: 3,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5.0)),
-                  minimumSize: const Size(50, 35)
-                ),
-                onPressed: () async {
-                  FilePickerResult? result = await FilePicker.platform.pickFiles();
-          
-                  if (result != null) {
-                    File file = File(result.files.single.path!);
-                    print('ArSHAd');
-                    print(file);
-                  } else {
-                    // User canceled the picker
-                  }
+              CustomTextField(label: 'Email:',ctrl: emailCtrl,),
+
+              CustomTextField(label: 'Subject:',ctrl: subjectCtrl,),
+
+              CustomTextField(label: 'Mail:',maxLines: 5,ctrl: bodyCtrl,),
+
+              Consumer(
+                builder: (BuildContext context, WidgetRef ref, Widget? child) {
+
+                  return SecondaryButton(
+                      onTap: ref.read(mailProvider.notifier).pickFile);
                 },
-                child: const SizedBox(
-                  height: 35,
-                  width: 150,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Icon(Icons.upload),
-                      Text('attachment'),
-                    ],
-                  ),
-                ),
               ),
+
+              const AttachmentsView(),
+
               const SizedBox(height: 40,),
+
               Center(
-                child: MainButton(onTap: testSend),
-              ),
+                child: Consumer(
+                    builder: (BuildContext context, WidgetRef ref, Widget? child) {
+                      // final filePath = ref.watch(provider)
+                      return MainButton(onTap: testSend);
+                    },
+              )),
             ],
           ),
         ),

@@ -4,11 +4,12 @@ import 'package:flutter/material.dart';
 import 'button.dart';
 
 class CustomTextField extends StatelessWidget {
+  final TextEditingController ctrl;
   final String label;
   final int maxLines;
   const CustomTextField({super.key,
     required this.label,
-    this.maxLines = 1});
+    this.maxLines = 1, required this.ctrl});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +21,7 @@ class CustomTextField extends StatelessWidget {
           spacing: 20,
           // mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(label),
+            Text(label,style: TextStyle(fontWeight: FontWeight.w500),),
             label == 'Email:'?
                 const Row(
                   spacing: 5,
@@ -33,17 +34,18 @@ class CustomTextField extends StatelessWidget {
           ],
         ),
         TextField(
+          controller: ctrl,
           maxLines: maxLines,
           decoration: InputDecoration(
             filled: true,
             fillColor: Colors.white,
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(5),
-              borderSide: const BorderSide(color: Colors.green, width: 1),
+              borderSide: BorderSide(color: Colors.blue.shade300, width: 1),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(5),
-              borderSide: BorderSide(color: Colors.green, width: 1),
+              borderSide: BorderSide(color: Colors.blue.shade300, width: 1),
             ),
           ),
         ),

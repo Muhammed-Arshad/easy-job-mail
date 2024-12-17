@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class SuggestionButton extends StatelessWidget {
@@ -12,15 +11,17 @@ class SuggestionButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-        foregroundColor: Colors.white, backgroundColor: btnColor,
-        // shadowColor: Colors.greenAccent.shade200,
+        // foregroundColor: Colors.green,
+        backgroundColor: Colors.white,
+        shadowColor: Colors.blueAccent,
         elevation: 3,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(32.0)),
         minimumSize: const Size(50, 30), //////// HERE
       ),
       onPressed: () {},
-      child: Text(content),
+      child: Text(content,style: const TextStyle(color: Colors.black,
+          fontWeight: FontWeight.normal),),
     );
   }
 }
