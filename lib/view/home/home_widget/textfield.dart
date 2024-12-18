@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'button.dart';
@@ -23,14 +22,14 @@ class CustomTextField extends StatelessWidget {
           children: [
             Text(label,style: TextStyle(fontWeight: FontWeight.w500),),
             label == 'Email:'?
-                const Row(
+                Row(
                   spacing: 5,
                   children: [
-                    SuggestionButton(content: '@gmail.com'),
-                    SuggestionButton(content: '@hotmail.com')
+                    SuggestionButton(content: '@gmail.com',ctrl: ctrl,),
+                    SuggestionButton(content: '@hotmail.com',ctrl:ctrl)
                   ],
-                ):const SuggestionButton(content: 'last used',
-              btnColor: Colors.blue,),
+                ):SuggestionButton(content: 'last used',
+              btnColor: Colors.blue,ctrl: ctrl),
           ],
         ),
         TextField(

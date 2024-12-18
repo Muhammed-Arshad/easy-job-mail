@@ -22,7 +22,18 @@ class FileNotifier extends StateNotifier<List<FileModel>> {
     state = [...state, file]; // Update the state
     await FileStorage.saveFiles(state); // Save to SharedPreferences
   }
+
+  Future<void> removeFile(String path) async {
+    state = state.where((file) => file.path != path).toList(); // Update the state
+    await FileStorage.saveFiles(state); // Save updated list to SharedPreferences
+  }
+
+
 }
+
+final selectedFileProvider = StateProvider<int>((ref){
+  return 0;
+});
 
 
 

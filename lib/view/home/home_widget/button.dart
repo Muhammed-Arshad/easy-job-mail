@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
 class SuggestionButton extends StatelessWidget {
+  final TextEditingController ctrl;
   final String content;
   final Color btnColor;
   const SuggestionButton({super.key,
   required this.content,
-  this.btnColor = Colors.green});
+  this.btnColor = Colors.green,
+    required this.ctrl});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +21,9 @@ class SuggestionButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(32.0)),
         minimumSize: const Size(50, 30), //////// HERE
       ),
-      onPressed: () {},
+      onPressed: () {
+        ctrl.text += content;
+      },
       child: Text(content,style: const TextStyle(color: Colors.black,
           fontWeight: FontWeight.normal),),
     );

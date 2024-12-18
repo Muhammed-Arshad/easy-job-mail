@@ -55,6 +55,12 @@ class MailModel {
       attachment: attachment ?? this.attachment,
     );
   }
+
+  @override
+  String toString() {
+    return 'MailModel(id: $id, email: $email, subject: $subject, body: $body, '
+        'attachment: $attachment)';
+  }
 }
 
 

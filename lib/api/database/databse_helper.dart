@@ -75,7 +75,6 @@ class FileStorage {
 
   // Load list of FileModel from SharedPreferences
   static Future<List<FileModel>> loadFiles() async {
-    print('ARSHADDDD');
     SharedPreferences prefs = await SharedPreferences.getInstance();
     List<String>? fileJsonList = prefs.getStringList(_fileKey);
 

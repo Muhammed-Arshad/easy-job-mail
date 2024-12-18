@@ -1,14 +1,11 @@
-
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:jobmail/provider/home_provider/file_provider.dart';
 import 'package:jobmail/provider/home_provider/home_provider.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server/gmail.dart';
 
 import '../../api/google_api_service.dart';
-import '../../config/utils/utils.dart';
 import '../../model/mail_model.dart';
 import 'home_widget/attachments.dart';
 import 'home_widget/button.dart';
@@ -123,8 +120,28 @@ class _HomeViewState extends State<HomeView> {
               Center(
                 child: Consumer(
                     builder: (BuildContext context, WidgetRef ref, Widget? child) {
-                      // final filePath = ref.watch(provider)
-                      return MainButton(onTap: testSend);
+
+                      final files = ref.watch(fileProvider);
+                      final fileIndex = ref.watch(selectedFileProvider);
+                      final mail = ref.watch(mailProvider);
+
+                      return MainButton(onTap: (){
+
+                        final path = files[fileIndex].path;
+
+                        print('ARSHAD----');
+                        print(path);
+
+                        final newMail = MailModel(
+                          id: mail.length + 1,
+                            email: emailCtrl.text,
+                            subject: subjectCtrl.text,
+                            body: bodyCtrl.text,
+                            attachment:path
+                        );
+
+                        ref.read(mailProvider.notifier).sendMail(newMail);
+                      });
                     },
               )),
             ],

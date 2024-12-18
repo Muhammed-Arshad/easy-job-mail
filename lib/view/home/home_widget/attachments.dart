@@ -11,7 +11,8 @@ class AttachmentsView extends ConsumerWidget {
   Widget build(BuildContext context,WidgetRef ref) {
 
     final files = ref.watch(fileProvider);
-    
+    final selectedFile = ref.watch(selectedFileProvider);
+
     return GridView.builder(
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
@@ -21,18 +22,28 @@ class AttachmentsView extends ConsumerWidget {
           crossAxisCount: 2),
       itemBuilder: (BuildContext context, int index) {
         final file = files[index];
-        return Card(
-          color: Colors.white,
-          shadowColor: Colors.blue,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                // const Text('Arshad'),
-                Text(file.name!.substring(0,14)),
-                IconButton(onPressed: (){}, icon: const Icon(Icons.close)),
-              ], //just for testing, will fill with image later
+        return GestureDetector(
+          onTap: (){
+            ref.read(selectedFileProvider.notifier).state = index;
+          },
+          child: Card(
+            color: selectedFile == index?Colors.blue:Colors.white,
+            shadowColor: Colors.blue,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 9.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(file.name!.substring(0,14),
+                    style: const TextStyle(fontSize: 13),),
+                  IconButton(onPressed: (){
+
+                    ref.read(fileProvider.notifier)
+                        .removeFile(file.path!);
+
+                  }, icon: const Icon(Icons.close,size: 20,)),
+                ], //just for testing, will fill with image later
+              ),
             ),
           ),
         );
